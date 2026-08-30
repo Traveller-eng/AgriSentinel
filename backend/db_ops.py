@@ -23,7 +23,7 @@ from weather import get_weather
 
 logger = logging.getLogger(__name__)
 
-VALID_STATUSES = ("pending", "confirmed", "rejected")
+VALID_STATUSES = ("pending", "confirmed", "rejected", "sent_to_lab")
 _EARTH_RADIUS_KM = 6371.0
 _RISK_SORT_RANK = {"HIGH": 0, "MEDIUM": 1, "LOW": 2}
 
@@ -383,14 +383,15 @@ def update_report_status(
 
     Parameters:
         report_id: Target report primary key.
-        new_status: One of ``pending``, ``confirmed``, ``rejected``.
+        new_status: One of ``pending``, ``confirmed``, ``rejected``,
+            or ``sent_to_lab``.
         expert_notes: Optional notes written by the extension worker.
 
     Returns:
         True if a row was updated, False if ``report_id`` does not exist.
 
     Raises:
-        ValueError: If ``new_status`` is not a allowed status, or ``report_id``
+        ValueError: If ``new_status`` is not an allowed status, or ``report_id``
             is not an integer.
         RuntimeError: Database write failed after validation.
     """

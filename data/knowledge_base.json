@@ -1,0 +1,164 @@
+{
+  "Bacterial Spot": {
+    "display_name": "Tomato Bacterial Spot",
+    "symptoms": [
+      "Small dark brown to black spots on leaves, often with yellowing around affected tissue.",
+      "Raised scabby spots may appear on fruit and stems.",
+      "Leaf spotting can merge under warm, wet conditions and cause leaf drop."
+    ],
+    "favorable_conditions": [
+      "Warm weather with frequent rain, overhead irrigation, or long leaf wetness.",
+      "Dense canopy and poor air movement.",
+      "Contaminated seed, seedlings, tools, or crop residue."
+    ],
+    "prevention": [
+      "Use healthy seedlings and avoid moving through the crop when leaves are wet.",
+      "Improve spacing, staking, and pruning to reduce leaf wetness.",
+      "Remove infected crop residue after harvest and rotate away from tomato and related crops where possible."
+    ],
+    "ipm_measures": [
+      "Rogue badly affected plants early if infection is localized.",
+      "Prefer drip irrigation over overhead watering.",
+      "Use copper or other locally recommended bactericide only under agriculture expert guidance and label directions."
+    ],
+    "safe_input_guidance": [
+      "Do not mix chemicals casually or repeat sprays without field confirmation.",
+      "Follow the product label, waiting period, protective equipment guidance, and local extension recommendations.",
+      "Avoid unnecessary pesticide use when the diagnosis confidence or field symptoms are unclear."
+    ],
+    "when_to_contact_expert": [
+      "Rapid spread after rain or irrigation.",
+      "Spots on fruit or widespread leaf drop.",
+      "Unclear symptoms, low model confidence, or repeated failures after basic sanitation."
+    ]
+  },
+  "Early Blight": {
+    "display_name": "Tomato Early Blight",
+    "symptoms": [
+      "Brown leaf spots with target-like concentric rings, usually beginning on older lower leaves.",
+      "Yellowing around spots followed by drying or leaf drop.",
+      "Stem lesions or fruit shoulder lesions may appear in severe cases."
+    ],
+    "favorable_conditions": [
+      "Warm, humid weather and repeated leaf wetness.",
+      "Nutrient stress, weak plants, or older foliage.",
+      "Infected crop debris and volunteer tomato plants."
+    ],
+    "prevention": [
+      "Stake plants and remove lower infected leaves carefully.",
+      "Mulch to reduce soil splash onto lower leaves.",
+      "Maintain balanced nutrition and avoid plant stress."
+    ],
+    "ipm_measures": [
+      "Remove infected leaves and destroy crop debris away from the field.",
+      "Improve airflow and avoid overhead irrigation.",
+      "Use locally recommended fungicide only after extension-worker validation and label-based application advice."
+    ],
+    "safe_input_guidance": [
+      "Do not apply broad-spectrum fungicide only because a phone image looks suspicious.",
+      "Use the least-risk option recommended locally and respect harvest interval instructions.",
+      "Keep spray records for follow-up monitoring."
+    ],
+    "when_to_contact_expert": [
+      "Many lower leaves show ringed spots.",
+      "Disease appears during flowering or fruiting.",
+      "The app risk level is HIGH or neighboring confirmed cases are reported."
+    ]
+  },
+  "Late Blight": {
+    "display_name": "Tomato Late Blight",
+    "symptoms": [
+      "Large water-soaked patches on leaves that quickly turn brown or black.",
+      "White fuzzy growth may appear on leaf undersides during humid mornings.",
+      "Fruit may develop firm greasy brown lesions."
+    ],
+    "favorable_conditions": [
+      "Cool to mild temperatures with very high humidity, fog, rain, or long leaf wetness.",
+      "Cloudy weather and dense crop canopy.",
+      "Nearby infected tomato or potato crops."
+    ],
+    "prevention": [
+      "Scout frequently during wet weather and remove suspicious plants early.",
+      "Keep foliage dry when possible and improve field ventilation.",
+      "Avoid planting near infected potato or tomato residue."
+    ],
+    "ipm_measures": [
+      "Treat suspected late blight as urgent because spread can be fast.",
+      "Isolate or remove heavily infected plants after expert advice.",
+      "Use protective fungicide programs only as recommended by local agriculture officers and label directions."
+    ],
+    "safe_input_guidance": [
+      "Do not delay expert contact if symptoms match late blight during wet weather.",
+      "Do not overdose or shorten spray intervals beyond label instructions.",
+      "Use protective clothing and observe pre-harvest intervals."
+    ],
+    "when_to_contact_expert": [
+      "Water-soaked lesions spread within 1-2 days.",
+      "White growth appears under leaves in humid conditions.",
+      "Fruit lesions are present or the risk checklist flags humidity and rainfall."
+    ]
+  },
+  "Yellow Leaf Curl Virus": {
+    "display_name": "Tomato Yellow Leaf Curl Virus",
+    "symptoms": [
+      "Upward curling of young leaves with yellowing and reduced leaf size.",
+      "Stunted plants with shortened internodes.",
+      "Flower drop and poor fruit set, especially if infection starts early."
+    ],
+    "favorable_conditions": [
+      "High whitefly pressure.",
+      "Warm dry periods that favor whitefly multiplication.",
+      "Nearby infected tomato plants or susceptible weeds."
+    ],
+    "prevention": [
+      "Use healthy seedlings and inspect nursery plants before transplanting.",
+      "Remove infected plants early to reduce virus source.",
+      "Manage weeds and volunteer tomato plants around the field."
+    ],
+    "ipm_measures": [
+      "Use yellow sticky traps and record whitefly counts.",
+      "Use insect-proof nursery protection where possible.",
+      "Prefer integrated whitefly management with expert guidance; chemical control alone cannot cure infected plants."
+    ],
+    "safe_input_guidance": [
+      "Do not expect pesticide spray to cure virus-infected plants.",
+      "Avoid repeated insecticide use without monitoring whitefly counts.",
+      "Rotate control methods only with local expert guidance to reduce resistance risk."
+    ],
+    "when_to_contact_expert": [
+      "Young plants show curling, yellowing, and stunting.",
+      "Whitefly counts are rising in traps.",
+      "Several nearby farms report similar symptoms."
+    ]
+  },
+  "Healthy": {
+    "display_name": "Healthy Tomato Leaf",
+    "symptoms": [
+      "Leaf appears broadly normal with no strong visible disease pattern detected.",
+      "Minor marks may be caused by age, dust, nutrition, water stress, or image quality."
+    ],
+    "favorable_conditions": [
+      "Continue monitoring because disease risk can still rise with weather and nearby outbreaks.",
+      "Flowering and fruiting stages need closer scouting even when the current leaf looks healthy."
+    ],
+    "prevention": [
+      "Keep regular field scouting twice a week and after rain.",
+      "Maintain balanced irrigation, nutrition, sanitation, and weed control.",
+      "Use pest traps to catch early whitefly or moth pressure."
+    ],
+    "ipm_measures": [
+      "No disease treatment is recommended from this image alone.",
+      "Recheck if symptoms appear on multiple plants or spread across the field.",
+      "Log trap counts and weather conditions for follow-up monitoring."
+    ],
+    "safe_input_guidance": [
+      "Avoid preventive pesticide use without a clear pest or disease reason.",
+      "Save input cost by monitoring first and acting only when evidence supports action."
+    ],
+    "when_to_contact_expert": [
+      "Symptoms appear later or spread quickly.",
+      "The model confidence is low or the photo quality is poor.",
+      "Neighboring confirmed cases are reported nearby."
+    ]
+  }
+}
