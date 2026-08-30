@@ -89,7 +89,7 @@ def export_report_pdf(report: dict, advisory: dict) -> str:
     """
     out_dir = Path("outputs")
     out_dir.mkdir(parents=True, exist_ok=True)
-    report_id = report.get("report_id", "000")
+    report_id = report.get("id", "000")
     pdf_filename = f"AgriSentinel_Field_Report_{report_id}.pdf"
     pdf_path = str(out_dir / pdf_filename)
 
@@ -155,7 +155,7 @@ def export_report_pdf(report: dict, advisory: dict) -> str:
         # Case Summary Table
         conf_pct = f"{int(report.get('confidence', 0.85) * 100)}%"
         data_summary = [
-            [Paragraph("<b>Report ID:</b>", body_style), Paragraph(str(report.get("report_id")), body_style), Paragraph("<b>Status:</b>", body_style), Paragraph(str(report.get("status", "pending")).upper(), body_style)],
+            [Paragraph("<b>Report ID:</b>", body_style), Paragraph(str(report.get("id")), body_style), Paragraph("<b>Status:</b>", body_style), Paragraph(str(report.get("status", "pending")).upper(), body_style)],
             [Paragraph("<b>Farm Plot ID:</b>", body_style), Paragraph(str(report.get("farm_id")), body_style), Paragraph("<b>Submission Date:</b>", body_style), Paragraph(str(report.get("created_at")), body_style)],
             [Paragraph("<b>Village:</b>", body_style), Paragraph(str(report.get("village")), body_style), Paragraph("<b>District:</b>", body_style), Paragraph(str(report.get("district", "Wardha")), body_style)],
             [Paragraph("<b>Crop:</b>", body_style), Paragraph(str(report.get("crop", "Tomato")), body_style), Paragraph("<b>Growth Stage:</b>", body_style), Paragraph(str(report.get("growth_stage", "Flowering")), body_style)],
@@ -295,13 +295,13 @@ with tab_queue:
 
             report_options = {}
             for r in reports:
-                r_id = r["report_id"]
+                r_id = r["id"]
                 label = f"#{r_id} · {r.get('farm_id')} — {r.get('predicted_disease')} ({r.get('village', 'Wardha')})"
                 report_options[r_id] = label
 
-            current_selected_id = st.session_state.get("selected_extension_report_id", reports[0]["report_id"])
+            current_selected_id = st.session_state.get("selected_extension_report_id", reports[0]["id"])
             if current_selected_id not in report_options:
-                current_selected_id = reports[0]["report_id"]
+                current_selected_id = reports[0]["id"]
 
             st.markdown(f"""
             <div style="display: grid; grid-template-columns: 100px 140px 1fr 90px; gap: 0.5rem; padding: 0.5rem 0.75rem; background-color: #EFEBE3; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: {INK_SECONDARY}; text-transform: uppercase;">
@@ -313,7 +313,7 @@ with tab_queue:
             """, unsafe_allow_html=True)
 
             for r in reports:
-                r_id = r["report_id"]
+                r_id = r["id"]
                 is_selected = (r_id == current_selected_id)
                 r_color = get_risk_color(r.get("risk_level", "LOW"))
                 s_color = get_status_color(r.get("status", "pending"))
@@ -348,7 +348,7 @@ with tab_queue:
                     st.rerun()
 
         with col_detail:
-            selected_rep = next((r for r in reports if r["report_id"] == current_selected_id), reports[0])
+            selected_rep = next((r for r in reports if r["id"] == current_selected_id), reports[0])
             sel_advisory = get_advisory(selected_rep.get("predicted_disease"))
             sel_risk_color = get_risk_color(selected_rep.get("risk_level", "LOW"))
             sel_status_color = get_status_color(selected_rep.get("status", "pending"))
@@ -357,7 +357,7 @@ with tab_queue:
             <div class="ags-card" style="border-top: 4px solid {BRAND_GREEN};">
                 <div class="ags-eyebrow">{t("case_inspection_eyebrow")}</div>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                    <h2 class="ags-h2" style="font-size: 1.35rem; margin: 0;">Case #{selected_rep['report_id']} — {selected_rep.get('farm_id')}</h2>
+                    <h2 class="ags-h2" style="font-size: 1.35rem; margin: 0;">Case #{selected_rep['id']} — {selected_rep.get('farm_id')}</h2>
                     {render_badge(selected_rep.get('status', 'pending').upper(), sel_status_color)}
                 </div>
                 <div class="ags-caption" style="margin-bottom: 1rem;">
@@ -399,8 +399,8 @@ with tab_queue:
             with btn_col1:
                 if st.button(t("btn_confirm"), key="btn_confirm_act", use_container_width=True):
                     try:
-                        update_report_status(selected_rep["report_id"], "confirmed", expert_notes_input)
-                        st.success(f"Case #{selected_rep['report_id']} -> CONFIRMED.")
+                        update_report_status(selected_rep["id"], "confirmed", expert_notes_input)
+                        st.success(f"Case #{selected_rep['id']} -> CONFIRMED.")
                         st.rerun()
                     except Exception as e_act:
                         logging.error(f"Failed to confirm report: {e_act}")
@@ -409,8 +409,8 @@ with tab_queue:
             with btn_col2:
                 if st.button(t("btn_reject"), key="btn_reject_act", use_container_width=True):
                     try:
-                        update_report_status(selected_rep["report_id"], "rejected", expert_notes_input)
-                        st.warning(f"Case #{selected_rep['report_id']} -> REJECTED.")
+                        update_report_status(selected_rep["id"], "rejected", expert_notes_input)
+                        st.warning(f"Case #{selected_rep['id']} -> REJECTED.")
                         st.rerun()
                     except Exception as e_act:
                         logging.error(f"Failed to reject report: {e_act}")
@@ -420,8 +420,8 @@ with tab_queue:
                 if st.button(t("btn_send_lab"), key="btn_lab_act", use_container_width=True):
                     try:
                         lab_note = f"Sent to lab for verification. Remarks: {expert_notes_input}".strip()
-                        update_report_status(selected_rep["report_id"], "pending", lab_note)
-                        st.info(f"Case #{selected_rep['report_id']} flagged for Laboratory Dispatch.")
+                        update_report_status(selected_rep["id"], "pending", lab_note)
+                        st.info(f"Case #{selected_rep['id']} flagged for Laboratory Dispatch.")
                         st.rerun()
                     except Exception as e_act:
                         logging.error(f"Failed to flag for lab: {e_act}")

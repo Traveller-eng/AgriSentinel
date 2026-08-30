@@ -318,14 +318,14 @@ with chart_col:
 
     if counts_by_day:
         df_chart = pd.DataFrame(counts_by_day)
-        df_chart = df_chart.rename(columns={"date": "Date", "cases": "Confirmed Cases"})
+        df_chart = df_chart.rename(columns={"date": "Date", "count": "Confirmed Cases"})
         df_chart = df_chart.set_index("Date")
         st.line_chart(df_chart["Confirmed Cases"], height=280, color=BRAND_GREEN)
         
         st.markdown(f"""
         <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem; color: {INK_SECONDARY}; border-top: 1px solid #EAE4D8; padding-top: 0.5rem;">
             <span>{t("chart_surveillance_window")}</span>
-            <span>{t("chart_total_logged")} <strong>{sum(item.get('cases', 0) for item in counts_by_day)}</strong></span>
+            <span>{t("chart_total_logged")} <strong>{sum(item.get('count', 0) for item in counts_by_day)}</strong></span>
         </div>
         """, unsafe_allow_html=True)
     else:
