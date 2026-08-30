@@ -1,0 +1,165 @@
+{
+  "Early Blight": {
+    "scientific_name": "Alternaria solani",
+    "symptoms": [
+      "Concentric dark brown rings ('target board' spots) on older lower leaves",
+      "Yellow halos surrounding brown necrotic spots",
+      "Premature leaf drop starting from bottom of plant upward",
+      "Dark, sunken, leathery cankers on stems and fruit attachment points"
+    ],
+    "prevention": [
+      "Maintain 2-3 year crop rotation with non-solanaceous crops (avoid potato, brinjal, chili)",
+      "Ensure proper plant spacing (60 x 45 cm) for good air circulation",
+      "Use drip irrigation or furrow watering to avoid wetting foliage",
+      "Stake plants and mulch soil surface to prevent soil splash onto lower leaves"
+    ],
+    "ipm_measures": [
+      "Prune and burn/bury severely infected lower leaves immediately",
+      "Apply bio-fungicides like Trichoderma viride or Pseudomonas fluorescens @ 5g/L as preventive spray",
+      "Spray neem seed kernel extract (NSKE 5%) or neem oil (3ml/L) at first sign of symptoms"
+    ],
+    "safe_input_guidance": [
+      "If disease exceeds 5% leaf area, apply Mancozeb 75% WP @ 2.5g/L or Chlorothalonil 75% WP @ 2g/L",
+      "For severe infections, spray Azoxystrobin 18.2% + Difenoconazole 11.4% SC @ 1ml/L",
+      "Adhere strictly to a 7-10 day waiting/pre-harvest interval (PHI) and wear protective gear"
+    ],
+    "when_to_contact_expert": "Contact the local KVK or extension officer if more than 20% foliage is affected, stem lesions appear on young seedlings, or if standard fungicide sprays show no response within 5 days."
+  },
+  "Late Blight": {
+    "scientific_name": "Phytophthora infestans",
+    "symptoms": [
+      "Large, irregular water-soaked pale-green to dark-brown lesions on leaves",
+      "White fungal downy growth on undersides of leaves during cool, humid morning hours",
+      "Rapidly turning brown, brittle, and necrotic within 48-72 hours",
+      "Greasy dark-brown blotches on green fruit turning rot"
+    ],
+    "prevention": [
+      "Avoid planting downwind of old tomato/potato fields",
+      "Avoid overhead sprinkler irrigation; water only at root zone early in morning",
+      "Select certified disease-free transplants and resistant varieties (e.g., Arka Rakshak, Kashi Adarsh)",
+      "Destroy volunteer tomato and potato plants around the field perimeter"
+    ],
+    "ipm_measures": [
+      "Eradicate and bag infected plants immediately to prevent airborne spore dissemination",
+      "Ensure optimal field drainage to avoid standing water after rains",
+      "Spray copper oxychloride (COC 50% WP @ 3g/L) during overcast, high-humidity weather forecasts"
+    ],
+    "safe_input_guidance": [
+      "Upon confirmed detection, spray Cymoxanil 8% + Mancozeb 64% WP @ 2.5g/L or Metalaxyl 8% + Mancozeb 64% WP @ 2g/L",
+      "Rotate chemical modes of action (FRAC codes) to prevent fungicide resistance",
+      "Observe 10-14 days pre-harvest interval before harvesting fruits"
+    ],
+    "when_to_contact_expert": "CRITICAL: Late Blight can destroy an entire field within 3-5 days. Contact the Taluka Agriculture Officer or KVK extension specialist IMMEDIATELY upon first identification."
+  },
+  "Leaf Mold": {
+    "scientific_name": "Passalora fulva (syn. Cladosporium fulvum)",
+    "symptoms": [
+      "Pale green or yellowish spots on upper leaf surfaces with indistinct margins",
+      "Olive-green to brown velvety fungal patches on lower leaf surfaces directly beneath yellow spots",
+      "Infected leaves curl, wither, and drop prematurely in high humidity conditions"
+    ],
+    "prevention": [
+      "Maximize ventilation and airflow through pruning and wider row spacing",
+      "Avoid excess relative humidity (>85%) inside polyhouses or dense canopies",
+      "Clean and sterilize trellising stakes and pruning shears regularly"
+    ],
+    "ipm_measures": [
+      "Remove suckers and lower senescent leaves to improve light penetration and air movement",
+      "Spray bio-formulation of Bacillus subtilis @ 5ml/L at early vegetative stage"
+    ],
+    "safe_input_guidance": [
+      "Apply Copper hydroxide 77% WP @ 2g/L or Carbendazim 50% WP @ 1g/L at initial symptom onset",
+      "Ensure thorough coverage of both upper and lower leaf surfaces during spraying"
+    ],
+    "when_to_contact_expert": "Contact extension worker if mold spreads to upper canopy leaves during flowering stage."
+  },
+  "Septoria Leaf Spot": {
+    "scientific_name": "Septoria lycopersici",
+    "symptoms": [
+      "Numerous small (1.5-3mm), circular spots with dark brown borders and grayish-white centers",
+      "Tiny black specks (pycnidia fruiting bodies) visible in the center of mature spots",
+      "Severe leaf yellowing and blighting from ground level upward, exposing fruit to sunscald"
+    ],
+    "prevention": [
+      "Practice strict 3-year crop rotation away from solanaceous species",
+      "Deep summer ploughing to bury crop residues harboring overwintering fungal spores",
+      "Mulch beds with straw or black plastic to create a barrier against soil splash"
+    ],
+    "ipm_measures": [
+      "Hand-pick and destroy initial infected leaves before rain/irrigation events",
+      "Disinfect field tools and avoid working in wet fields to prevent spore transfer"
+    ],
+    "safe_input_guidance": [
+      "Spray Chlorothalonil 75% WP @ 2g/L or Zineb 75% WP @ 2g/L on 7-10 day intervals",
+      "Use protective gloves and face mask during chemical application"
+    ],
+    "when_to_contact_expert": "Consult your agricultural extension worker if defoliation exceeds 15% before fruit set."
+  },
+  "Bacterial Spot": {
+    "scientific_name": "Xanthomonas spp.",
+    "symptoms": [
+      "Small (2-3mm), water-soaked, dark brown to black angular lesions on leaves",
+      "Lesions often have greasy texture and may coalesce causing leaf tearing and shot-holes",
+      "Scabby, rough, raised dark-brown spots with white halos on green fruit"
+    ],
+    "prevention": [
+      "Use certified disease-free, hot-water treated seeds (50°C for 25 minutes)",
+      "Avoid overhead sprinkler irrigation; disinfect nursery trays and tools with 1% sodium hypochlorite",
+      "Do not handle plants when foliage is wet"
+    ],
+    "ipm_measures": [
+      "Remove and destroy symptomatic seedlings before field transplanting",
+      "Foliar spray with Streptocycline @ 0.5g/10L water combined with Copper Oxychloride @ 25g/10L"
+    ],
+    "safe_input_guidance": [
+      "Apply Copper hydroxide 53.8% DF @ 1.5g/L mixed with Mancozeb @ 2g/L for synergy",
+      "Avoid excessive nitrogen fertilization which produces succulent tissue prone to bacterial entry"
+    ],
+    "when_to_contact_expert": "Contact KVK plant pathologist if fruit spots appear across more than 10% of plants."
+  },
+  "Yellow Leaf Curl Virus": {
+    "scientific_name": "Tomato Yellow Leaf Curl Virus (TYLCV)",
+    "symptoms": [
+      "Upward curling and cupping of leaf margins with marked chlorosis (yellowing)",
+      "Severe plant stunting, shortened internodes, and bushy upright growth habit",
+      "Flower abortion and dramatically reduced fruit set; newly formed fruits remain small"
+    ],
+    "prevention": [
+      "Use 40-50 mesh insect-proof nets in nurseries to prevent whitefly vector entry",
+      "Plant barrier crops like maize, sorghum, or pearl millet around tomato fields",
+      "Use TYLCV-tolerant hybrid cultivars (e.g., US-440, To-1057, Abhinav)"
+    ],
+    "ipm_measures": [
+      "Install yellow sticky traps @ 20-25 traps per acre to monitor and capture whiteflies (Bemisia tabaci)",
+      "Spray Neem Oil (10,000 ppm) @ 2ml/L or Lecanicillium lecanii @ 5g/L targeting undersides of leaves",
+      "Rogue out and destroy infected viral plants immediately upon sighting"
+    ],
+    "safe_input_guidance": [
+      "For vector control during early stages: Spray Acetamiprid 20% SP @ 0.5g/L or Thiamethoxam 25% WG @ 0.3g/L or Diafenthiuron 50% WP @ 1g/L",
+      "Rotate insecticides across distinct IRAC classes to avoid whitefly insecticide resistance"
+    ],
+    "when_to_contact_expert": "Inform extension staff if whitefly population exceeds 5 adults per leaf or viral stunting affects >5% of the plot within 30 days of transplanting."
+  },
+  "Healthy": {
+    "scientific_name": "Solanum lycopersicum",
+    "symptoms": [
+      "Vibrant green leaves with uniform coloration and no necrotic spots or chlorosis",
+      "Sturdy stem structure and vigorous vegetative/reproductive development",
+      "Normal leaf morphology without cupping, mottling, or fungal spore growth"
+    ],
+    "prevention": [
+      "Maintain regular crop scouting every 3-4 days, inspecting leaf undersides and new shoots",
+      "Ensure balanced N-P-K nutrient application along with micronutrients (Zinc, Boron, Calcium)",
+      "Maintain consistent soil moisture through scheduled drip irrigation"
+    ],
+    "ipm_measures": [
+      "Keep field borders free from weeds that could serve as alternative viral or pest reservoirs",
+      "Deploy monitoring pheromone traps (for Tomato Pinworm / Fruit borer) @ 5 traps/acre"
+    ],
+    "safe_input_guidance": [
+      "No chemical fungicides or bactericides required",
+      "Apply prophylactic biostimulant or seaweed extract foliar spray for enhanced plant vigor"
+    ],
+    "when_to_contact_expert": "Continue standard crop management. Consult your local extension worker during scheduled routine village visits or if any unexpected symptoms emerge."
+  }
+}
