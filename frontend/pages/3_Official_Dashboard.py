@@ -107,7 +107,7 @@ with f_col2:
 
 with f_col3:
     district_options = [t("filter_all_districts"), "Wardha", "Nagpur", "Amravati", "Yavatmal", "Chandrapur"]
-    selected_district_display = st.selectbox(t("filter_district_label"), options=district_options, index=1)
+    selected_district_display = st.selectbox(t("filter_district_label"), options=district_options, index=0)
     selected_district = None if selected_district_display == t("filter_all_districts") else selected_district_display
 
 with f_col4:
@@ -143,19 +143,19 @@ except Exception as e_counts:
 
 # --- CALCULATE METRICS ---
 total_confirmed = len(reports_filtered)
-high_risk_count = sum(1 for r in reports_filtered if "HIGH" in str(r.get("risk_level", "")).upper())
-mod_risk_count = sum(1 for r in reports_filtered if "MOD" in str(r.get("risk_level", "")).upper() or "MED" in str(r.get("risk_level", "")).upper())
-unique_villages = len(set(r.get("village", "Wardha") for r in reports_filtered))
+high_risk_count = sum(1 for r in reports_filtered if "HIGH" in str(r.get("severity", "")).upper())
+mod_risk_count = sum(1 for r in reports_filtered if "MOD" in str(r.get("severity", "")).upper() or "MED" in str(r.get("severity", "")).upper())
+unique_villages = len(set(r.get("district", "Wardha") for r in reports_filtered))
 
-stat_active_alerts = max(14, high_risk_count * 12 + 18)
-stat_confirmed = max(len(reports_filtered), 89 if not selected_disease else len(reports_filtered))
-stat_villages = max(unique_villages, 38)
+stat_active_alerts = high_risk_count
+stat_confirmed = len(reports_filtered)
+stat_villages = unique_villages
 
 delta_text = "+12% vs last week"
 delta_color = "#A23E2B"
 if counts_by_day and len(counts_by_day) >= 14:
-    last_7_sum = sum(item.get("cases", 0) for item in counts_by_day[-7:])
-    prior_7_sum = sum(item.get("cases", 0) for item in counts_by_day[-14:-7])
+    last_7_sum = sum(item.get("count", 0) for item in counts_by_day[-7:])
+    prior_7_sum = sum(item.get("count", 0) for item in counts_by_day[-14:-7:])
     if prior_7_sum > 0:
         pct_diff = int(((last_7_sum - prior_7_sum) / prior_7_sum) * 100)
         sign = "+" if pct_diff >= 0 else ""
@@ -244,7 +244,7 @@ with map_col:
             m = folium.Map(
                 location=[center_lat, center_lon],
                 zoom_start=10,
-                tiles="CartoDB positron",
+                tiles="OpenStreetMap",
                 control_scale=True
             )
 
@@ -252,8 +252,8 @@ with map_col:
                 r_lat = rep.get("lat", 20.7453)
                 r_lon = rep.get("lon", 78.6022)
                 r_disease = rep.get("predicted_disease", "Early Blight")
-                r_risk = rep.get("risk_level", "Moderate Risk")
-                r_village = rep.get("village", "Wardha")
+                r_risk = rep.get("severity", "LOW")
+                r_village = rep.get("district", "Wardha")
                 r_farm = rep.get("farm_id", "F-4412")
                 r_color = get_risk_color(r_risk)
 
@@ -261,8 +261,8 @@ with map_col:
                 <div style="font-family: sans-serif; font-size: 12px; width: 170px;">
                     <b style="color: #2F5233;">{r_disease}</b><br/>
                     <b>Farm ID:</b> {r_farm}<br/>
-                    <b>Village:</b> {r_village}<br/>
-                    <b>Risk Level:</b> {r_risk}<br/>
+                    <b>District:</b> {r_village}<br/>
+                    <b>Severity:</b> {r_risk}<br/>
                     <b>Status:</b> Confirmed
                 </div>
                 """
@@ -289,7 +289,7 @@ with map_col:
                 <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📍</div>
                 <div style="font-weight: 700; color: {INK}; font-size: 1rem; margin-bottom: 0.25rem;">Wardha Surveillance Cluster Active</div>
                 <div class="ags-caption" style="max-width: 320px; margin-bottom: 1rem;">
-                    Monitoring {len(reports_filtered)} confirmed cases across {unique_villages} villages.
+                    Monitoring {len(reports_filtered)} confirmed cases across {unique_villages} districts.
                 </div>
                 <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
                     <span class="ags-badge" style="background-color: #A23E2B22; color: #A23E2B;">High Severity ({high_risk_count})</span>
@@ -354,14 +354,14 @@ if reports_filtered:
     </div>
     """, unsafe_allow_html=True)
 
-    for rep in reports_filtered[:5]:
-        r_col = get_risk_color(rep.get("risk_level", "LOW"))
+    for rep in sorted(reports_filtered, key=lambda r: r["created_at"], reverse=True)[:5]:
+        r_col = get_risk_color(rep.get("severity", "LOW"))
         st.markdown(f"""
         <div style="display: grid; grid-template-columns: 110px 140px 1fr 120px 110px; gap: 0.5rem; padding: 0.6rem 0.75rem; border-bottom: 1px solid #EAE4D8; font-size: 0.875rem; align-items: center;">
             <div style="font-weight: 600; color: {INK};">{rep.get('farm_id')}</div>
-            <div style="color: {INK_SECONDARY};">{rep.get('village', 'Wardha')}</div>
+            <div style="color: {INK_SECONDARY};">{rep.get('district', 'Wardha')}</div>
             <div style="font-weight: 600; color: {INK};">{rep.get('predicted_disease')}</div>
-            <div>{render_badge(rep.get('risk_level', 'Moderate Risk'), r_col)}</div>
+            <div>{render_badge(rep.get('severity', 'LOW'), r_col)}</div>
             <div class="ags-caption">{rep.get('created_at', '2026-08-29')}</div>
         </div>
         """, unsafe_allow_html=True)

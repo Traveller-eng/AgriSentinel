@@ -539,6 +539,7 @@ def get_reports_filtered(
             return [
                 {
                     "id": row.id,
+                    "farm_id": row.farm_id,
                     "lat": row.lat,
                     "lon": row.lon,
                     "severity": row.severity,

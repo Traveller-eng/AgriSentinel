@@ -9,6 +9,7 @@ import sys
 import datetime
 import logging
 from pathlib import Path
+from PIL import Image, UnidentifiedImageError
 
 # Configure paths
 current_dir = Path(__file__).resolve().parent
@@ -37,6 +38,22 @@ from utils.styling import (
 )
 from utils.kb_lookup import get_advisory
 from utils.i18n import t, render_language_selector
+
+
+def _is_valid_image(path: str | None) -> bool:
+    """Check if a file path is a valid, openable image.
+    
+    Returns False if path is None, doesn't exist, or cannot be opened as an image.
+    """
+    if not path or not os.path.exists(path):
+        return False
+    try:
+        with Image.open(path) as im:
+            im.verify()
+        return True
+    except (UnidentifiedImageError, OSError, Exception):
+        return False
+
 
 # --- SWITCHABLE IMPORTS (Real Backend vs Mock Fallback) ---
 USE_MOCKS = False
@@ -69,17 +86,18 @@ st.set_page_config(
 
 st.markdown(get_global_css(), unsafe_allow_html=True)
 
-# Maharashtra Village list
-VILLAGE_OPTIONS = [
-    "Wardha (HQ)",
-    "Hinganghat",
-    "Arvi",
-    "Seloo",
-    "Deoli",
-    "Samudrapur",
-    "Karanja Ghadge",
-    "Ashti"
-]
+# Maharashtra Village list & coordinates (matching 1_Farmer.py)
+VILLAGE_COORDINATES = {
+    "Wardha (HQ)": {"lat": 20.7453, "lon": 78.6022, "district": "Wardha"},
+    "Hinganghat": {"lat": 20.5524, "lon": 78.8358, "district": "Wardha"},
+    "Arvi": {"lat": 20.9840, "lon": 78.2323, "district": "Wardha"},
+    "Seloo": {"lat": 20.8358, "lon": 78.7061, "district": "Wardha"},
+    "Deoli": {"lat": 20.6621, "lon": 78.4795, "district": "Wardha"},
+    "Samudrapur": {"lat": 20.5894, "lon": 79.0305, "district": "Wardha"},
+    "Karanja Ghadge": {"lat": 21.1963, "lon": 78.5878, "district": "Wardha"},
+    "Ashti": {"lat": 21.2057, "lon": 78.1818, "district": "Wardha"},
+}
+VILLAGE_OPTIONS = list(VILLAGE_COORDINATES.keys())
 
 
 def export_report_pdf(report: dict, advisory: dict) -> str:
@@ -157,10 +175,10 @@ def export_report_pdf(report: dict, advisory: dict) -> str:
         data_summary = [
             [Paragraph("<b>Report ID:</b>", body_style), Paragraph(str(report.get("id")), body_style), Paragraph("<b>Status:</b>", body_style), Paragraph(str(report.get("status", "pending")).upper(), body_style)],
             [Paragraph("<b>Farm Plot ID:</b>", body_style), Paragraph(str(report.get("farm_id")), body_style), Paragraph("<b>Submission Date:</b>", body_style), Paragraph(str(report.get("created_at")), body_style)],
-            [Paragraph("<b>Village:</b>", body_style), Paragraph(str(report.get("village")), body_style), Paragraph("<b>District:</b>", body_style), Paragraph(str(report.get("district", "Wardha")), body_style)],
-            [Paragraph("<b>Crop:</b>", body_style), Paragraph(str(report.get("crop", "Tomato")), body_style), Paragraph("<b>Growth Stage:</b>", body_style), Paragraph(str(report.get("growth_stage", "Flowering")), body_style)],
-            [Paragraph("<b>Diagnosed Disease:</b>", body_style), Paragraph(f"<b>{report.get('predicted_disease')}</b>", body_style), Paragraph("<b>Confidence:</b>", body_style), Paragraph(conf_pct, body_style)],
-            [Paragraph("<b>Risk Severity:</b>", body_style), Paragraph(str(report.get("risk_level", "Moderate Risk")), body_style), Paragraph("<b>Botanical Pathogen:</b>", body_style), Paragraph(advisory.get("scientific_name", "N/A"), body_style)],
+            [Paragraph("<b>District:</b>", body_style), Paragraph(str(report.get("district", "Wardha")), body_style), Paragraph("<b>Crop:</b>", body_style), Paragraph(str(report.get("crop", "Tomato")), body_style)],
+            [Paragraph("<b>Growth Stage:</b>", body_style), Paragraph(str(report.get("growth_stage", "Flowering")), body_style), Paragraph("<b>Diagnosed Disease:</b>", body_style), Paragraph(f"<b>{report.get('predicted_disease')}</b>", body_style)],
+            [Paragraph("<b>Confidence:</b>", body_style), Paragraph(conf_pct, body_style), Paragraph("<b>Risk Severity:</b>", body_style), Paragraph(str(report.get("severity", "LOW")), body_style)],
+            [Paragraph("<b>Botanical Pathogen:</b>", body_style), Paragraph(advisory.get("scientific_name", "N/A"), body_style), Paragraph("", body_style), Paragraph("", body_style)],
         ]
         t_el = Table(data_summary, colWidths=[110, 150, 110, 150])
         t_el.setStyle(TableStyle([
@@ -210,10 +228,10 @@ def export_report_pdf(report: dict, advisory: dict) -> str:
             f.write(f"Generated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
             f.write("="*50 + "\n\n")
             f.write(f"Farm ID: {report.get('farm_id')}\n")
-            f.write(f"Village: {report.get('village')} | District: {report.get('district')}\n")
+            f.write(f"District: {report.get('district')}\n")
             f.write(f"Crop: {report.get('crop')} | Growth Stage: {report.get('growth_stage')}\n")
             f.write(f"Diagnosed Disease: {report.get('predicted_disease')} (Confidence: {int(report.get('confidence', 0.85)*100)}%)\n")
-            f.write(f"Risk Level: {report.get('risk_level')}\n")
+            f.write(f"Risk Level: {report.get('severity')}\n")
             f.write(f"Status: {report.get('status')}\n")
             f.write(f"Officer Notes: {report.get('expert_notes')}\n\n")
             f.write("IPM MEASURES:\n")
@@ -296,7 +314,7 @@ with tab_queue:
             report_options = {}
             for r in reports:
                 r_id = r["id"]
-                label = f"#{r_id} · {r.get('farm_id')} — {r.get('predicted_disease')} ({r.get('village', 'Wardha')})"
+                label = f"#{r_id} · {r.get('farm_id')} — {r.get('predicted_disease')} ({r.get('district', 'Wardha')})"
                 report_options[r_id] = label
 
             current_selected_id = st.session_state.get("selected_extension_report_id", reports[0]["id"])
@@ -315,7 +333,7 @@ with tab_queue:
             for r in reports:
                 r_id = r["id"]
                 is_selected = (r_id == current_selected_id)
-                r_color = get_risk_color(r.get("risk_level", "LOW"))
+                r_color = get_risk_color(r.get("severity", "LOW"))
                 s_color = get_status_color(r.get("status", "pending"))
                 conf_val = f"{int(r.get('confidence', 0.85) * 100)}%"
 
@@ -330,11 +348,11 @@ with tab_queue:
                         </div>
                         <div>
                             <div style="font-size: 0.875rem; font-weight: 600; color: {INK};">{r.get('farmer_name', 'Farmer')}</div>
-                            <div class="ags-caption">{r.get('village', 'Wardha')}</div>
+                            <div class="ags-caption">{r.get('district', 'Wardha')}</div>
                         </div>
                         <div>
                             <div style="font-size: 0.875rem; font-weight: 600; color: {INK};">{r.get('predicted_disease')}</div>
-                            <div class="ags-caption">{conf_val} · {render_badge(r.get('risk_level', 'Moderate Risk'), r_color)}</div>
+                            <div class="ags-caption">{conf_val} · {render_badge(r.get('severity', 'LOW'), r_color)}</div>
                         </div>
                         <div style="text-align: right;">
                             {render_badge(r.get('status', 'pending').capitalize(), s_color)}
@@ -350,7 +368,7 @@ with tab_queue:
         with col_detail:
             selected_rep = next((r for r in reports if r["id"] == current_selected_id), reports[0])
             sel_advisory = get_advisory(selected_rep.get("predicted_disease"))
-            sel_risk_color = get_risk_color(selected_rep.get("risk_level", "LOW"))
+            sel_risk_color = get_risk_color(selected_rep.get("severity", "LOW"))
             sel_status_color = get_status_color(selected_rep.get("status", "pending"))
 
             st.markdown(f"""
@@ -361,7 +379,7 @@ with tab_queue:
                     {render_badge(selected_rep.get('status', 'pending').upper(), sel_status_color)}
                 </div>
                 <div class="ags-caption" style="margin-bottom: 1rem;">
-                    {t("case_submitted_on")} {selected_rep.get('created_at')} · {selected_rep.get('village')}, {selected_rep.get('district', 'Wardha')}
+                    {t("case_submitted_on")} {selected_rep.get('created_at')} · {selected_rep.get('district', 'Wardha')}
                 </div>
             """, unsafe_allow_html=True)
 
@@ -371,20 +389,19 @@ with tab_queue:
                 <div><strong>{t("grid_growth_stage")}</strong> {selected_rep.get('growth_stage', 'Flowering')}</div>
                 <div><strong>{t("grid_predicted")}</strong> {selected_rep.get('predicted_disease')}</div>
                 <div><strong>{t("grid_confidence")}</strong> {int(selected_rep.get('confidence', 0.85)*100)}%</div>
-                <div><strong>{t("grid_risk_level")}</strong> {render_badge(selected_rep.get('risk_level', 'Moderate'), sel_risk_color)}</div>
-                <div><strong>{t("grid_farmer")}</strong> {selected_rep.get('farmer_name', 'Ramesh Patil')}</div>
+                <div><strong>{t("grid_risk_level")}</strong> {render_badge(selected_rep.get('severity', 'LOW'), sel_risk_color)}</div>
             </div>
             """, unsafe_allow_html=True)
 
             img_path = selected_rep.get("image_path")
             gc_path = selected_rep.get("gradcam_path")
-            if (img_path and os.path.exists(img_path)) or (gc_path and os.path.exists(gc_path)):
+            if _is_valid_image(img_path) or _is_valid_image(gc_path):
                 col_img1, col_img2 = st.columns(2)
                 with col_img1:
-                    if img_path and os.path.exists(img_path):
+                    if _is_valid_image(img_path):
                         st.image(img_path, caption=t("original_sample_caption"), use_container_width=True)
                 with col_img2:
-                    if gc_path and os.path.exists(gc_path):
+                    if _is_valid_image(gc_path):
                         st.image(gc_path, caption=t("gradcam_caption"), use_container_width=True)
 
             st.markdown(f"<div style='font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #6B6558; margin-top: 0.5rem;'>{t('expert_notes_label')}</div>", unsafe_allow_html=True)
@@ -420,7 +437,7 @@ with tab_queue:
                 if st.button(t("btn_send_lab"), key="btn_lab_act", use_container_width=True):
                     try:
                         lab_note = f"Sent to lab for verification. Remarks: {expert_notes_input}".strip()
-                        update_report_status(selected_rep["id"], "pending", lab_note)
+                        update_report_status(selected_rep["id"], "sent_to_lab", lab_note)
                         st.info(f"Case #{selected_rep['id']} flagged for Laboratory Dispatch.")
                         st.rerun()
                     except Exception as e_act:
@@ -495,14 +512,16 @@ with tab_trap:
             st.error("Observation date cannot be in the future.")
         else:
             try:
+                village_data = VILLAGE_COORDINATES[trap_village]
                 obs_id = insert_trap_observation(
                     farm_id=trap_farm_id.strip(),
                     pest_name=trap_pest_name.strip(),
                     count=trap_count,
                     trap_type=trap_type_eng,
-                    observed_at=trap_date,
-                    village=trap_village,
-                    district="Wardha"
+                    observed_at=trap_date.isoformat(),
+                    lat=village_data["lat"],
+                    lon=village_data["lon"],
+                    district=village_data["district"],
                 )
                 st.success(f"✓ Observation #{obs_id} successfully recorded for {trap_pest_name} ({trap_count} count) at {trap_village}.")
             except Exception as e_trap:

@@ -9,7 +9,7 @@ import sys
 import uuid
 import logging
 from pathlib import Path
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 
 # Ensure paths are configured
 current_dir = Path(__file__).resolve().parent
@@ -38,6 +38,22 @@ from utils.styling import (
 from utils.kb_lookup import get_advisory
 from utils.i18n import t, render_language_selector
 
+
+def _is_valid_image(path: str | None) -> bool:
+    """Check if a file path is a valid, openable image.
+    
+    Returns False if path is None, doesn't exist, or cannot be opened as an image.
+    """
+    if not path or not os.path.exists(path):
+        return False
+    try:
+        with Image.open(path) as im:
+            im.verify()
+        return True
+    except (UnidentifiedImageError, OSError, Exception):
+        return False
+
+
 # --- SWITCHABLE IMPORTS (Real Backend/ML vs Mock Fallback) ---
 USE_MOCKS = False
 
@@ -46,8 +62,7 @@ try:
         raise ImportError("Forced mock usage via USE_MOCKS=True")
     from backend.db_ops import insert_report, evaluate_and_update_risk
     from backend.models import DISEASE_CLASSES, GROWTH_STAGES
-    from ml.predict import predict
-    from ml.gradcam import generate_gradcam
+    from ml.predict import predict_with_gradcam
 except Exception as e:
     logging.info(f"Using frontend.mocks due to: {e}")
     from mocks import (
@@ -55,8 +70,7 @@ except Exception as e:
         evaluate_and_update_risk,
         DISEASE_CLASSES,
         GROWTH_STAGES,
-        predict,
-        generate_gradcam,
+        predict_with_gradcam,
         MAHARASHTRA_VILLAGES
     )
 
@@ -201,18 +215,10 @@ if diagnose_btn or "diagnosis_result" in st.session_state:
                 with open(saved_image_path, "wb") as f:
                     f.write(uploaded_file.getbuffer())
 
-                # 2. ML Prediction
-                pred_result = predict(saved_image_path)
-                predicted_disease = pred_result.get("predicted_disease", "Early Blight")
-                confidence = float(pred_result.get("confidence", 0.85))
-
-                # 3. Grad-CAM generation (non-blocking)
-                gradcam_path = None
-                try:
-                    gradcam_path = generate_gradcam(saved_image_path, predicted_disease)
-                except Exception as e_gc:
-                    logging.warning(f"Grad-CAM generation failed: {e_gc}")
-                    gradcam_path = None
+                # 2. ML Prediction & Grad-CAM
+                predicted_disease, confidence, gradcam_path = predict_with_gradcam(
+                    saved_image_path, output_dir=Path("images")
+                )
 
                 # 4. Extract Coordinates & District
                 lat, lon, district = VILLAGE_COORDINATES.get(
@@ -338,11 +344,12 @@ if diagnose_btn or "diagnosis_result" in st.session_state:
         """, unsafe_allow_html=True)
 
         # Grad-CAM heatmap visualization
-        if gradcam_path and os.path.exists(gradcam_path):
+        if _is_valid_image(gradcam_path):
             with st.expander(t("gradcam_expander"), expanded=False):
                 gc_col1, gc_col2 = st.columns(2)
                 with gc_col1:
-                    st.image(res["saved_image_path"], caption=t("original_sample_caption"), use_container_width=True)
+                    if _is_valid_image(res["saved_image_path"]):
+                        st.image(res["saved_image_path"], caption=t("original_sample_caption"), use_container_width=True)
                 with gc_col2:
                     st.image(gradcam_path, caption=t("gradcam_caption"), use_container_width=True)
 
@@ -355,7 +362,7 @@ if diagnose_btn or "diagnosis_result" in st.session_state:
             """, unsafe_allow_html=True)
 
             for item in checklist:
-                is_met = item.get("met", False)
+                is_met = item.get("passed", False)
                 icon_html = f'<span class="ags-factor-icon-checked">☑</span>' if is_met else f'<span class="ags-factor-icon-unchecked">☐</span>'
                 factor_txt = item.get("factor", "")
                 detail_txt = item.get("detail", "")

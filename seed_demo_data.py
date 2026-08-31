@@ -23,16 +23,14 @@ from init_db import init_db
 from models import DISEASE_CLASSES, GROWTH_STAGES, Report, TrapObservation, WeatherCache, session_scope
 
 VILLAGES = [
-    {"name": "Narayangaon", "district": "Pune", "lat": 19.1176, "lon": 73.9654},
-    {"name": "Talegaon Dabhade", "district": "Pune", "lat": 18.7350, "lon": 73.6756},
-    {"name": "Rahata", "district": "Ahmednagar", "lat": 19.7167, "lon": 74.4833},
-    {"name": "Sinnar", "district": "Nashik", "lat": 19.8500, "lon": 74.0000},
-    {"name": "Lasalgaon", "district": "Nashik", "lat": 20.1420, "lon": 74.2390},
-    {"name": "Karjat", "district": "Ahmednagar", "lat": 18.5510, "lon": 75.0080},
-    {"name": "Baramati", "district": "Pune", "lat": 18.1517, "lon": 74.5777},
-    {"name": "Jalna", "district": "Jalna", "lat": 19.8410, "lon": 75.8864},
-    {"name": "Pandharpur", "district": "Solapur", "lat": 17.6792, "lon": 75.3270},
-    {"name": "Akluj", "district": "Solapur", "lat": 17.8833, "lon": 75.0167}
+    {"name": "Wardha (HQ)", "district": "Wardha", "lat": 20.7453, "lon": 78.6022},
+    {"name": "Hinganghat", "district": "Wardha", "lat": 20.5524, "lon": 78.8358},
+    {"name": "Arvi", "district": "Wardha", "lat": 20.9840, "lon": 78.2323},
+    {"name": "Seloo", "district": "Wardha", "lat": 20.8358, "lon": 78.7061},
+    {"name": "Deoli", "district": "Wardha", "lat": 20.6621, "lon": 78.4795},
+    {"name": "Samudrapur", "district": "Wardha", "lat": 20.5894, "lon": 79.0305},
+    {"name": "Karanja Ghadge", "district": "Wardha", "lat": 21.1963, "lon": 78.5878},
+    {"name": "Ashti", "district": "Wardha", "lat": 21.2057, "lon": 78.1818},
 ]
 
 
